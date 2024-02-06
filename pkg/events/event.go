@@ -3,8 +3,8 @@ package events
 import "time"
 
 type Event struct {
-	Name    string
-	Payload interface{}
+	Name    string      `json:"name"`
+	Payload interface{} `json:"payload"`
 }
 
 func NewEvent(name string, payload interface{}) *Event {

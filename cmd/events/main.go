@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"net/http"
 
@@ -15,9 +16,21 @@ func main() {
 		Handler: mux,
 	}
 
-	server.ListenAndServe()
+	mux.HandleFunc("/", renderHTML)
+	mux.HandleFunc("/send-message", sendMassage)
 
-	event := events.NewEvent("hello", "Hello, World!")
+	server.ListenAndServe()
+}
+
+func renderHTML(w http.ResponseWriter, r *http.Request) {
+	t := template.Must(template.ParseFiles("./web/event.html"))
+	t.Execute(w, events.Event{})
+}
+
+func sendMassage(w http.ResponseWriter, r *http.Request) {
+	var event events.Event
+	event.Name = "hello"
+	event.Payload = r.FormValue("payload")
 
 	eventHandler := events.NewEventHandler(1)
 
@@ -27,9 +40,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = eventDispatcher.Dispatch(event)
+	err = eventDispatcher.Dispatch(&event)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	log.Println("Event dispatched")
 }

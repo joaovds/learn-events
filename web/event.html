@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <h2>
+      Insira a mensagem a ser enviada
+    </h2>
+
+    <form action="/send-message" method="post">
+      <label for="message">Mensagem:</label>
+      <input type="text" id="message" name="payload">
+
+      <button type="submit">
+        Enviar mensagem ao RabbitMQ
+      </button>
+    </form>
+  </body>
+</html>
