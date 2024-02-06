@@ -135,6 +135,31 @@ func (s *EventDispatcherTestSuite) TestEventDispatcher_Dispatch() {
   eh.AssertNumberOfCalls(s.T(), "Handle", 1)
 }
 
+// REMOVE METHOD
+
+func (s *EventDispatcherTestSuite) TestEventDispatcher_Remove() {
+  err := s.eventDispatcher.Register(s.event.GetName(), &s.handler)
+  s.Nil(err)
+  s.Equal(1, len(s.eventDispatcher.handlers[s.event.GetName()]))
+  err = s.eventDispatcher.Register(s.event.GetName(), &s.handler2)
+  s.Nil(err)
+  s.Equal(2, len(s.eventDispatcher.handlers[s.event.GetName()]))
+
+  err = s.eventDispatcher.Remove(s.event.GetName(), &s.handler)
+  s.Nil(err)
+  s.Equal(1, len(s.eventDispatcher.handlers[s.event.GetName()]))
+
+  err = s.eventDispatcher.Register(s.event.GetName(), &s.handler3)
+  s.Nil(err)
+  s.Equal(2, len(s.eventDispatcher.handlers[s.event.GetName()]))
+
+  err = s.eventDispatcher.Remove(s.event.GetName(), &s.handler3)
+  s.Nil(err)
+  s.Equal(1, len(s.eventDispatcher.handlers[s.event.GetName()]))
+
+  assert.Equal(s.T(), &s.handler2, s.eventDispatcher.handlers[s.event.GetName()][0])
+}
+
 // SUIT RUN
 
 func TestSuite(t *testing.T) {
