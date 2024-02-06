@@ -50,16 +50,16 @@ func (ed *EventDispatcher) Has(eventName string, handler EventHandlerInterface) 
 }
 
 func (ed *EventDispatcher) Dispatch(event EventInterface) error {
-  if handlers, ok := ed.handlers[event.GetName()]; ok {
-    wg := &sync.WaitGroup{}
-    for _, h := range handlers {
-      wg.Add(1)
-      h.Handle(event, wg)
-    }
-    wg.Wait()
-  }
+	if handlers, ok := ed.handlers[event.GetName()]; ok {
+		wg := &sync.WaitGroup{}
+		for _, h := range handlers {
+			wg.Add(1)
+			h.Handle(event, wg)
+		}
+		wg.Wait()
+	}
 
-  return nil
+	return nil
 }
 
 func (ed *EventDispatcher) Remove(eventName string, handler EventHandlerInterface) error {

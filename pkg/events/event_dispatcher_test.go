@@ -122,13 +122,13 @@ type MockHandler struct {
 
 func (m *MockHandler) Handle(event EventInterface, wg *sync.WaitGroup) {
 	m.Called(event)
-  wg.Done()
+	wg.Done()
 }
 
 func (s *EventDispatcherTestSuite) TestEventDispatcher_Dispatch() {
 	eh := &MockHandler{}
 	eh.On("Handle", &s.event)
-  eh2 := &MockHandler{}
+	eh2 := &MockHandler{}
 	eh2.On("Handle", &s.event)
 
 	s.eventDispatcher.Register(s.event.GetName(), eh)
