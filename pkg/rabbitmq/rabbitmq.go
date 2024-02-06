@@ -1,6 +1,7 @@
 package rabbitmq
 
 import (
+	"context"
 	"log"
 
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -36,6 +37,25 @@ func Consume(ch *amqp.Channel, msgsOut chan<- amqp.Delivery) error {
 
 	for msg := range msgs {
 		msgsOut <- msg
+	}
+
+	return nil
+}
+
+func Publish(ctx context.Context, ch *amqp.Channel, msg []byte, exName string) error {
+	err := ch.PublishWithContext(
+		ctx,
+		exName,
+		"",
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body:        msg,
+		},
+	)
+	if err != nil {
+		return err
 	}
 
 	return nil
